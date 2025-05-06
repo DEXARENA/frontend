@@ -44,7 +44,7 @@ const Battle: React.FC<BattleProps> = ({
 }) => {
   const [battleState, setBattleState] = useState<'preparing' | 'active' | 'finishing'>('preparing');
   const [countdown, setCountdown] = useState(3);
-  
+
   useEffect(() => {
     // Simulate battle preparation with countdown
     if (battleState === 'preparing') {
@@ -58,7 +58,7 @@ const Battle: React.FC<BattleProps> = ({
           return prev - 1;
         });
       }, 1000);
-      
+
       return () => clearInterval(timer);
     }
   }, [battleState]);
@@ -73,98 +73,82 @@ const Battle: React.FC<BattleProps> = ({
           </div>
         </div>
       )}
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="lg:col-span-2 glass-panel rounded-lg p-4">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-3">
-              <Trophy size={24} className="text-neon-orange" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-4">
+        <div className="lg:col-span-2 glass-panel rounded-lg p-2 sm:p-3">
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center gap-2">
+              <Trophy size={18} className="text-neon-orange" />
               <div>
-                <h2 className="text-xl font-bold">Battle Arena</h2>
-                <p className="text-sm text-gray-400">Stake: {stake.amount} {stake.token}</p>
+                <h2 className="text-base font-bold">Battle Arena</h2>
+                <p className="text-xs text-gray-400">Stake: {stake.amount} {stake.token}</p>
               </div>
             </div>
-            
-            <CountdownTimer 
-              initialSeconds={timeRemaining} 
+
+            <CountdownTimer
+              initialSeconds={timeRemaining}
               progressColor="orange"
-              className="w-32"
+              className="w-24 sm:w-28"
             />
           </div>
-          
-          <div className="flex flex-col md:flex-row justify-between gap-8 mb-8">
+
+          <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-4 mb-4">
             {/* Player 1 */}
-            <div className="flex-1 glass-panel rounded-lg p-4 neon-border-blue">
-              <div className="flex items-center gap-3 mb-4">
-                <Avatar 
-                  image={player1.avatar} 
-                  address={player1.address}
-                  size="lg"
-                  glowColor="blue"
-                />
+            <div className="flex-1 glass-panel rounded-lg p-2 sm:p-3 neon-border-blue">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-full bg-neon-blue/20 flex items-center justify-center text-neon-blue font-bold">
+                  {player1.token?.charAt(0) || 'Y'}
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold">You {player1.token && `(${player1.token})`}</h3>
-                  <p className="text-sm text-neon-blue">
-                    {player1.address.slice(0, 6)}...{player1.address.slice(-4)}
+                  <h3 className="text-sm font-bold">You {player1.token && `(${player1.token})`}</h3>
+                  <p className="text-xs text-neon-blue">
+                    {player1.address.slice(0, 4)}...{player1.address.slice(-4)}
                   </p>
                 </div>
               </div>
-              
-              <div className="space-y-3">
-                <StatusBar 
-                  label="Health" 
-                  value={player1.health} 
+
+              <div className="space-y-1.5">
+                <StatusBar
+                  label="Health"
+                  value={player1.health}
                   maxValue={player1.maxHealth}
                   color="blue"
-                />
-                <StatusBar 
-                  label="Energy" 
-                  value={player1.energy} 
-                  maxValue={player1.maxEnergy}
-                  color="green"
+                  size="sm"
                 />
               </div>
             </div>
-            
+
             {/* VS Indicator */}
-            <div className="flex items-center justify-center">
-              <div className="text-4xl font-bold text-glow-orange">VS</div>
+            <div className="flex items-center justify-center py-1 sm:py-0">
+              <div className="text-xl sm:text-2xl font-bold text-glow-orange">VS</div>
             </div>
-            
+
             {/* Player 2 */}
-            <div className="flex-1 glass-panel rounded-lg p-4 neon-border-red">
-              <div className="flex items-center gap-3 mb-4">
-                <Avatar 
-                  image={player2.avatar} 
-                  address={player2.address}
-                  size="lg"
-                  glowColor="red"
-                />
+            <div className="flex-1 glass-panel rounded-lg p-2 sm:p-3 neon-border-red">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-full bg-neon-red/20 flex items-center justify-center text-neon-red font-bold">
+                  {player2.token?.charAt(0) || 'O'}
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold">Opponent {player2.token && `(${player2.token})`}</h3>
-                  <p className="text-sm text-neon-red">
-                    {player2.address.slice(0, 6)}...{player2.address.slice(-4)}
+                  <h3 className="text-sm font-bold">Opponent {player2.token && `(${player2.token})`}</h3>
+                  <p className="text-xs text-neon-red">
+                    {player2.address.slice(0, 4)}...{player2.address.slice(-4)}
                   </p>
                 </div>
               </div>
-              
-              <div className="space-y-3">
-                <StatusBar 
-                  label="Health" 
-                  value={player2.health} 
+
+              <div className="space-y-1.5">
+                <StatusBar
+                  label="Health"
+                  value={player2.health}
                   maxValue={player2.maxHealth}
                   color="red"
-                />
-                <StatusBar 
-                  label="Energy" 
-                  value={player2.energy} 
-                  maxValue={player2.maxEnergy}
-                  color="green"
+                  size="sm"
                 />
               </div>
             </div>
           </div>
-          
+
           {/* Hidden action buttons as per request */}
           <div className="hidden">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -198,22 +182,22 @@ const Battle: React.FC<BattleProps> = ({
               </Button>
             </div>
           </div>
-          
+
           {/* Single forfeit button */}
           <div className="flex justify-end">
             <Button
               onClick={onForfeit}
               variant="outline"
               size="sm"
-              className="border-gray-600 text-gray-300 hover:bg-gray-800"
+              className="border-gray-600 text-gray-300 hover:bg-gray-800 text-xs h-7"
             >
               Forfeit Battle
             </Button>
           </div>
         </div>
-        
+
         <div className="lg:col-span-1">
-          <ActionLog actions={actions} maxHeight="500px" />
+          <ActionLog actions={actions} maxHeight="300px" />
         </div>
       </div>
     </div>

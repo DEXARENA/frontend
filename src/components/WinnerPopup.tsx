@@ -28,12 +28,16 @@ const WinnerPopup: React.FC<WinnerPopupProps> = ({
   duration = 60
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
+  const [claimingReward, setClaimingReward] = useState(false);
+  const [rewardClaimed, setRewardClaimed] = useState(false);
   const { width, height } = useWindowSize();
 
   // Show confetti when popup opens
   useEffect(() => {
     if (isOpen) {
       setShowConfetti(true);
+      setClaimingReward(false);
+      setRewardClaimed(false);
       const timer = setTimeout(() => {
         setShowConfetti(false);
       }, 5000); // Show confetti for 5 seconds
@@ -41,6 +45,23 @@ const WinnerPopup: React.FC<WinnerPopupProps> = ({
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  // Handle claim reward
+  const handleClaimReward = () => {
+    setClaimingReward(true);
+
+    // Simulate blockchain transaction
+    setTimeout(() => {
+      setClaimingReward(false);
+      setRewardClaimed(true);
+
+      // Show new confetti burst on successful claim
+      setShowConfetti(true);
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 3000);
+    }, 2000);
+  };
 
   if (!winner || !loser) return null;
 
@@ -160,14 +181,51 @@ const WinnerPopup: React.FC<WinnerPopupProps> = ({
                     variant="outline"
                     onClick={onClose}
                     className="text-sm h-9"
+                    disabled={claimingReward}
                   >
                     Close
                   </Button>
-                  <Button
-                    className="bg-neon-blue hover:bg-neon-blue/80 text-sm h-9"
-                  >
-                    Claim Reward
-                  </Button>
+
+                  {!rewardClaimed ? (
+                    <Button
+                      className={`relative overflow-hidden text-sm h-9 ${
+                        claimingReward
+                          ? 'bg-gray-700 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-neon-blue to-neon-green hover:from-neon-blue/90 hover:to-neon-green/90'
+                      }`}
+                      onClick={handleClaimReward}
+                      disabled={claimingReward}
+                    >
+                      {claimingReward && (
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-neon-blue/20 to-neon-green/20"
+                          animate={{
+                            x: ["0%", "100%"],
+                            opacity: [0.5, 0.8, 0.5]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Number.POSITIVE_INFINITY,
+                            ease: "linear"
+                          }}
+                        />
+                      )}
+                      {claimingReward ? 'Processing...' : 'Claim Reward'}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="bg-green-500 hover:bg-green-500/90 text-sm h-9"
+                      disabled
+                    >
+                      <motion.span
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: "spring", duration: 0.5 }}
+                      >
+                        ✓ Claimed
+                      </motion.span>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

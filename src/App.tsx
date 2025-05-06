@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import MobileNav from "./components/MobileNav";
-import Footer from "./components/Footer";
 import LandingPage from "./pages/LandingPage";
 import Arena from "./pages/Arena";
 import BattlePage from "./pages/BattlePage";
@@ -62,7 +61,6 @@ const AppContent = () => {
           </Routes>
         </div>
         <MobileNav />
-        <Footer />
       </div>
       {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
     </>

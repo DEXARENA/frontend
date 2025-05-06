@@ -146,9 +146,14 @@ const ChallengeCardCompact: React.FC<ChallengeProps> = ({
         {/* Token and amount */}
         <div className="flex items-center gap-1.5">
           <TokenIcon token={stake.token} size="sm" />
-          <div className="flex items-baseline gap-1">
-            <span className="font-medium text-sm">{stake.amount}</span>
-            <span className="text-xs text-gray-400">{stake.token}</span>
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-1">
+              <span className="font-medium text-sm">{stake.amount}</span>
+              <span className="text-xs text-gray-400">{stake.token}</span>
+            </div>
+            <div className="text-[10px] text-gray-400">
+              Bet: {stake.amount} {stake.token} • Reward: {(Number(stake.amount) * maxParticipants).toFixed(2)} {stake.token}
+            </div>
           </div>
         </div>
 
@@ -160,6 +165,14 @@ const ChallengeCardCompact: React.FC<ChallengeProps> = ({
           </div>
         )}
       </div>
+
+      {/* Waiting for opponent indicator - only show for open challenges */}
+      {status === 'open' && participants.length < maxParticipants && (
+        <div className="flex items-center gap-1.5 mb-1.5 text-[10px] text-neon-orange">
+          <div className="w-1.5 h-1.5 rounded-full bg-neon-orange animate-pulse" />
+          <span>Waiting for opponent ({participants.length}/{maxParticipants})</span>
+        </div>
+      )}
 
       {/* Bottom row: Reward and action button */}
       <div className="flex items-center justify-between">

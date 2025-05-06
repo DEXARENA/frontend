@@ -27,6 +27,7 @@ interface PriceLineChartProps {
   title?: string;
   className?: string;
   updateInterval?: number;
+  compact?: boolean;
 }
 
 const PriceLineChart: React.FC<PriceLineChartProps> = ({
@@ -35,6 +36,7 @@ const PriceLineChart: React.FC<PriceLineChartProps> = ({
   title = 'Real-time Token Price Battle',
   className = '',
   updateInterval = 5000,
+  compact = false,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -309,17 +311,17 @@ const PriceLineChart: React.FC<PriceLineChartProps> = ({
   const player2Indicators = generateTrendIndicators(player2History, player2.color);
 
   return (
-    <div className={`glass-panel p-6 rounded-xl border-t border-white/10 shadow-lg relative overflow-hidden ${className}`}>
+    <div className={`glass-panel ${compact ? 'p-2 sm:p-3' : 'p-4 sm:p-6'} rounded-xl border-t border-white/10 shadow-lg relative overflow-hidden ${className}`}>
       {/* Background glow effects */}
       <div className="absolute -z-10 top-1/4 left-1/4 w-1/2 h-1/2 bg-neon-blue/10 rounded-full filter blur-3xl" />
       <div className="absolute -z-10 bottom-1/4 right-1/4 w-1/2 h-1/2 bg-neon-red/10 rounded-full filter blur-3xl" />
 
       {/* Responsive header section */}
-      <div className="flex flex-col gap-2 mb-4">
+      <div className={`flex flex-col gap-1 ${compact ? 'mb-2' : 'mb-4'}`}>
         {/* Title and update info */}
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="font-bold text-xl">{title}</h3>
-          <div className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <h3 className={`font-bold ${compact ? 'text-sm sm:text-base' : 'text-lg sm:text-xl'}`}>{title}</h3>
+          <div className="text-[10px] text-gray-400 bg-gray-800/50 px-1.5 py-0.5 rounded-full">
             Updates every 5s
           </div>
         </div>
@@ -385,63 +387,59 @@ const PriceLineChart: React.FC<PriceLineChartProps> = ({
         {/* Player info - mobile layout */}
         <div className="md:hidden">
           {/* Players side by side */}
-          <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="grid grid-cols-2 gap-1 mb-1">
             {/* Player 1 */}
-            <div className="flex flex-col items-center p-2 rounded-lg bg-gray-800/30">
-              <Avatar image={player1.avatar} address={player1.address} size="sm" glowColor="blue" />
-              <div className="mt-1 text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <span className="text-sm font-medium">{player1.id.toUpperCase()}</span>
-                  <span className="text-xs text-gray-400">(You)</span>
+            <div className={`flex items-center gap-1 p-1 rounded-lg bg-gray-800/30 ${compact ? 'text-xs' : 'text-sm'}`}>
+              <div className="w-5 h-5 rounded-full bg-neon-blue/20 flex items-center justify-center text-neon-blue font-bold text-[10px]">
+                {player1.id.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-0.5">
+                  <span className="font-medium truncate">{player1.id.toUpperCase()}</span>
+                  {player1.pnl !== undefined && (
+                    <span className={`${player1.pnl >= 0 ? 'text-green-400' : 'text-red-400'} text-[10px]`}>
+                      {player1.pnl >= 0 ? '↑' : '↓'}{Math.abs(player1.pnl).toFixed(1)}%
+                    </span>
+                  )}
                 </div>
-                <div className="text-neon-blue font-mono font-bold text-sm">${player1.value.toFixed(2)}</div>
-                {player1.pnl !== undefined && (
-                  <div className={`text-xs font-mono ${
-                    player1.pnl >= 0
-                      ? 'text-green-400'
-                      : 'text-red-400'
-                  }`}>
-                    {player1.pnl >= 0 ? '↑' : '↓'} {Math.abs(player1.pnl).toFixed(2)}%
-                  </div>
-                )}
+                <div className="text-neon-blue font-mono font-bold text-[10px]">${player1.value.toFixed(2)}</div>
               </div>
             </div>
 
             {/* Player 2 */}
-            <div className="flex flex-col items-center p-2 rounded-lg bg-gray-800/30">
-              <Avatar image={player2.avatar} address={player2.address} size="sm" glowColor="red" />
-              <div className="mt-1 text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <span className="text-sm font-medium">{player2.id.toUpperCase()}</span>
-                  <span className="text-xs text-gray-400">(Opp)</span>
+            <div className={`flex items-center gap-1 p-1 rounded-lg bg-gray-800/30 ${compact ? 'text-xs' : 'text-sm'}`}>
+              <div className="w-5 h-5 rounded-full bg-neon-red/20 flex items-center justify-center text-neon-red font-bold text-[10px]">
+                {player2.id.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-0.5">
+                  <span className="font-medium truncate">{player2.id.toUpperCase()}</span>
+                  {player2.pnl !== undefined && (
+                    <span className={`${player2.pnl >= 0 ? 'text-green-400' : 'text-red-400'} text-[10px]`}>
+                      {player2.pnl >= 0 ? '↑' : '↓'}{Math.abs(player2.pnl).toFixed(1)}%
+                    </span>
+                  )}
                 </div>
-                <div className="text-neon-red font-mono font-bold text-sm">${player2.value.toFixed(2)}</div>
-                {player2.pnl !== undefined && (
-                  <div className={`text-xs font-mono ${
-                    player2.pnl >= 0
-                      ? 'text-green-400'
-                      : 'text-red-400'
-                  }`}>
-                    {player2.pnl >= 0 ? '↑' : '↓'} {Math.abs(player2.pnl).toFixed(2)}%
-                  </div>
-                )}
+                <div className="text-neon-red font-mono font-bold text-[10px]">${player2.value.toFixed(2)}</div>
               </div>
             </div>
           </div>
 
-          {/* Oracle info in a row */}
-          <div className="flex justify-center gap-4 text-xs">
-            <div className="text-center px-2 py-1 rounded-lg bg-gray-800/50">
-              <span className="text-gray-400">Oracle:</span> Chainlink
+          {/* Oracle info in a row - only show if not compact */}
+          {!compact && (
+            <div className="flex justify-center gap-2 text-[10px]">
+              <div className="text-center px-1.5 py-0.5 rounded-lg bg-gray-800/50">
+                <span className="text-gray-400">Oracle:</span> Chainlink
+              </div>
+              <div className="text-center px-1.5 py-0.5 rounded-lg bg-gray-800/50">
+                <span className="text-gray-400">Updates:</span> 5s
+              </div>
             </div>
-            <div className="text-center px-2 py-1 rounded-lg bg-gray-800/50">
-              <span className="text-gray-400">Updates:</span> 5s
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      <div className="relative h-[250px] md:h-[300px]">
+      <div className={`relative ${compact ? 'h-[180px] sm:h-[220px]' : 'h-[250px] md:h-[300px]'}`}>
         <svg
           ref={svgRef}
           className="w-full h-full"

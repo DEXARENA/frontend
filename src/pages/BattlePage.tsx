@@ -310,8 +310,9 @@ const BattlePage = () => {
           player1={player1Data}
           player2={player2Data}
           title="Token Price Battle"
-          className="h-[300px] sm:h-[350px] md:h-[400px]"
+          className="h-[200px] sm:h-[250px] md:h-[300px]"
           updateInterval={5000}
+          compact={true}
         />
       </div>
 
