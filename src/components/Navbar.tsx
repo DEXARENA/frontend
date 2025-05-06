@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           
-          <nav className="hidden md:flex items-center gap-5">
+          {/* <nav className="hidden md:flex items-center gap-5">
             <Link to="/arena" className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors">
               <Trophy size={16} />
               <span>Arena</span>
@@ -46,15 +46,15 @@ const Navbar: React.FC = () => {
               <Users size={16} />
               <span>Leaderboard</span>
             </Link>
-          </nav>
+          </nav> */}
           
-          <Button 
+          {/* <Button 
             onClick={handleConnectWallet}
             className="bg-neon-blue hover:bg-neon-blue/80 rounded-full text-sm px-4 py-1 h-auto"
           >
             <Wallet size={14} className="mr-1.5" />
             Connect Wallet
-          </Button>
+          </Button> */}
         </div>
       </header>
     );

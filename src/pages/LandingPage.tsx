@@ -1,15 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldAlert, Lock, Trophy, Sparkles, Shield, Mail, Check, Wallet, Zap, Medal, Gift, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import { useWaitlist } from '@/hooks/use-waitlist';
 
 const LandingPage = () => {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Use our custom waitlist hook
+  const { email, setEmail, isSubmitting, handleSubmitEmail } = useWaitlist();
 
   // Animation variants
   const containerVariants = {
@@ -30,21 +30,6 @@ const LandingPage = () => {
       opacity: 1,
       transition: { duration: 0.6 }
     }
-  };
-
-  const handleSubmitEmail = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      toast({
-        title: "Successfully joined waitlist!",
-        description: "We'll notify you when you're granted access.",
-        variant: "default",
-      });
-      setEmail('');
-      setIsSubmitting(false);
-    }, 1000);
   };
 
   return (
@@ -83,7 +68,7 @@ const LandingPage = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-neon-blue/30 bg-neon-blue/10 text-neon-blue text-xs font-medium">
-              <span className="mr-2">🚀</span> Beta Launch - Limited Spots Available
+              <span className="mr-2">🚀</span> Join Waitlist Now!
             </div>
 
             <motion.h1
@@ -118,13 +103,13 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Link to="/arena">
+              {/* <Link to="/arena">
                 <Button className="text-lg py-6 px-8 bg-neon-blue hover:bg-neon-blue/80 shadow-lg shadow-neon-blue/20 transition-all duration-300 hover:scale-105 rounded-full">
                   Enter Arena <ArrowRight className="ml-2" />
                 </Button>
-              </Link>
+              </Link> */}
 
-              {/* Waitlist Form */}
+              {/* Waitlist Form - Connected to Supabase */}
               <form onSubmit={handleSubmitEmail} className="flex flex-col sm:flex-row gap-2">
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -568,13 +553,39 @@ const LandingPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
-                <Link to="/arena">
+                {/* <Link to="/arena">
                   <Button className="text-lg py-6 px-10 bg-gradient-to-r from-neon-blue to-neon-blue/80 hover:from-neon-blue/90 hover:to-neon-blue/70 shadow-lg shadow-neon-blue/20 transition-all duration-300 rounded-full">
                     Enter Arena Now <ArrowRight className="ml-2" />
                   </Button>
-                </Link>
+                </Link> */}
+
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+              {/* Waitlist Form - Connected to Supabase */}
+              <form onSubmit={handleSubmitEmail} className="flex flex-col sm:flex-row gap-2">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 h-12 rounded-full bg-neon-orange/10 border-neon-orange/30 text-white w-full sm:w-auto min-w-[200px]"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  disabled={isSubmitting}
+                  className="h-12 rounded-full border-neon-orange text-neon-orange hover:bg-neon-orange/10 transition-all duration-300"
+                >
+                  {isSubmitting ?
+                    <span className="flex items-center">Processing <span className="ml-2 animate-pulse">...</span></span> :
+                    'Join Waitlist'
+                  }
+                </Button>
+              </form>
+              {/* <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                 <Button
                   className="text-lg py-6 px-10 bg-transparent border border-white/20 hover:bg-white/5 hover:border-white/30 transition-all duration-300 rounded-full"
                   onClick={() => {
@@ -588,7 +599,7 @@ const LandingPage = () => {
                 >
                   <Wallet className="mr-2" /> Connect Wallet
                 </Button>
-              </motion.div>
+              </motion.div> */}
             </div>
           </motion.div>
         </div>
@@ -673,29 +684,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-bold flex items-center mb-6 md:mb-0">
-              <Shield size={24} className="text-neon-blue mr-2" />
-              <span className="text-glow-blue">DEX</span>
-              <span className="text-glow-orange">ARENA</span>
-            </div>
-
-            <div className="text-gray-400 text-sm">
-              © 2025 DEXARENA. All rights reserved.
-            </div>
-
-            <div className="flex gap-6 mt-6 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white">Terms</a>
-              <a href="#" className="text-gray-400 hover:text-white">Privacy</a>
-              <a href="#" className="text-gray-400 hover:text-white">Discord</a>
-              <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Footer is now handled by the global Footer component */}
     </div>
   );
 };
