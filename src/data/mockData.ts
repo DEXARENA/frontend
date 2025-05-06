@@ -1,6 +1,6 @@
 
-import { Challenge } from '@/components/ChallengeCard';
-import { Action } from '@/components/ActionLog';
+import type { Challenge } from '@/components/ChallengeCardCompact';
+import type { Action } from '@/components/ActionLog';
 
 // Generate a random Ethereum address
 const randomAddress = () => {
