@@ -10,6 +10,7 @@ type StatusBarProps = {
   showText?: boolean;
   className?: string;
   animated?: boolean;
+  size?: 'default' | 'sm';
 };
 
 const StatusBar: React.FC<StatusBarProps> = ({
@@ -19,30 +20,37 @@ const StatusBar: React.FC<StatusBarProps> = ({
   color = 'blue',
   showText = true,
   className,
-  animated = true
+  animated = true,
+  size = 'default'
 }) => {
   const percentage = Math.min(100, Math.max(0, (value / maxValue) * 100));
-  
+
   const colorClasses = {
     blue: 'bg-neon-blue',
     red: 'bg-neon-red',
     orange: 'bg-neon-orange',
     green: 'bg-emerald-500'
   };
-  
+
   return (
     <div className={cn('w-full', className)}>
       {showText && (
-        <div className="flex justify-between text-xs mb-1">
+        <div className={cn(
+          "flex justify-between mb-1",
+          size === 'sm' ? 'text-[10px]' : 'text-xs'
+        )}>
           <span className="font-medium text-gray-300">{label}</span>
           <span className="font-mono">
             {value}/{maxValue}
           </span>
         </div>
       )}
-      
-      <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
-        <div 
+
+      <div className={cn(
+        "bg-gray-800 rounded-full overflow-hidden",
+        size === 'sm' ? 'h-2' : 'h-3'
+      )}>
+        <div
           className={cn(
             'h-full rounded-full transition-all',
             colorClasses[color],
@@ -51,7 +59,10 @@ const StatusBar: React.FC<StatusBarProps> = ({
           style={{ width: `${percentage}%` }}
         >
           {percentage > 5 && percentage < 95 && !showText && (
-            <div className="flex justify-center h-full items-center text-xs font-semibold text-black">
+            <div className={cn(
+              "flex justify-center h-full items-center font-semibold text-black",
+              size === 'sm' ? 'text-[8px]' : 'text-xs'
+            )}>
               {Math.round(percentage)}%
             </div>
           )}

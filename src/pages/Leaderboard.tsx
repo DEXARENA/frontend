@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 
 const Leaderboard = () => {
   const [timeframe, setTimeframe] = useState("weekly");
-  
+
   // Mock leaderboard data
   const leaderboardData = {
     weekly: [
@@ -36,9 +36,9 @@ const Leaderboard = () => {
       // ... more all-time data
     ]
   };
-  
+
   const currentLeaderboard = leaderboardData[timeframe as keyof typeof leaderboardData];
-  
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -48,7 +48,7 @@ const Leaderboard = () => {
       }
     }
   };
-  
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -60,7 +60,7 @@ const Leaderboard = () => {
       }
     }
   };
-  
+
   const getPodiumClass = (position: number) => {
     switch (position) {
       case 1: return "bg-gradient-to-r from-yellow-500/20 to-amber-600/20 border-yellow-500/50";
@@ -69,7 +69,7 @@ const Leaderboard = () => {
       default: return "bg-black/30";
     }
   };
-  
+
   const getFlagEmoji = (countryCode: string) => {
     const codePoints = countryCode
       .toUpperCase()
@@ -77,94 +77,78 @@ const Leaderboard = () => {
       .map(char => 127397 + char.charCodeAt(0));
     return String.fromCodePoint(...codePoints);
   };
-  
+
   return (
-    <div className="container py-8 max-w-4xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center">
-            <Trophy size={28} className="text-neon-orange mr-2" />
-            Leaderboard
-          </h1>
-          <p className="text-gray-400">Top players ranked by win rate and XP</p>
-        </div>
-        
-        <Tabs value={timeframe} onValueChange={setTimeframe} className="w-full md:w-auto">
-          <TabsList className="grid grid-cols-3 w-full md:w-auto">
-            <TabsTrigger value="weekly">Weekly</TabsTrigger>
-            <TabsTrigger value="monthly">Monthly</TabsTrigger>
-            <TabsTrigger value="alltime">All Time</TabsTrigger>
+    <div className="container px-2 py-4 max-w-4xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+        <h1 className="text-xl font-bold flex items-center">
+          <Trophy size={18} className="text-neon-orange mr-2" />
+          Leaderboard
+        </h1>
+
+        <Tabs value={timeframe} onValueChange={setTimeframe} className="w-full sm:w-auto">
+          <TabsList className="grid grid-cols-3 w-full sm:w-auto h-8">
+            <TabsTrigger value="weekly" className="text-xs px-3">Weekly</TabsTrigger>
+            <TabsTrigger value="monthly" className="text-xs px-3">Monthly</TabsTrigger>
+            <TabsTrigger value="alltime" className="text-xs px-3">All Time</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
-      
+
       <div className="glass-panel rounded-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-black/40 to-black/20 p-4 border-b border-white/10">
-          <div className="grid grid-cols-12 gap-2 text-sm text-gray-400">
+        <div className="bg-gradient-to-r from-black/40 to-black/20 p-3 border-b border-white/10">
+          <div className="grid grid-cols-10 gap-2 text-xs text-gray-400">
             <div className="col-span-1">#</div>
-            <div className="col-span-5 md:col-span-4">Player</div>
-            <div className="col-span-2 text-center">Win Rate</div>
-            <div className="col-span-2 hidden md:block text-center">Matches</div>
-            <div className="col-span-2 md:col-span-3 text-right">XP</div>
+            <div className="col-span-5">Player</div>
+            <div className="col-span-2 text-center">Win %</div>
+            <div className="col-span-2 text-right">XP</div>
           </div>
         </div>
-        
-        <motion.div 
+
+        <motion.div
           className="divide-y divide-white/5"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {currentLeaderboard.map((player, index) => (
-            <motion.div 
-              key={player.id} 
-              className={`grid grid-cols-12 gap-2 p-4 items-center ${getPodiumClass(index + 1)}`}
+            <motion.div
+              key={player.id}
+              className={`grid grid-cols-10 gap-2 p-2 items-center ${getPodiumClass(index + 1)}`}
               variants={itemVariants}
             >
-              <div className="col-span-1 font-bold text-lg">
+              <div className="col-span-1 font-bold">
                 {index === 0 && <span className="text-yellow-500">🏆</span>}
                 {index === 1 && <span className="text-gray-300">🥈</span>}
                 {index === 2 && <span className="text-amber-700">🥉</span>}
                 {index > 2 && <span>{index + 1}</span>}
               </div>
-              
-              <div className="col-span-5 md:col-span-4 flex items-center gap-3">
-                <Avatar 
-                  image={player.avatar}
-                  address={player.address}
-                  size="sm"
-                  glowColor={index === 0 ? 'orange' : index === 1 ? 'blue' : index === 2 ? 'red' : undefined}
-                />
-                <div>
-                  <div className="font-semibold flex items-center gap-2">
+
+              <div className="col-span-5 flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold">
+                  {player.username.charAt(0).toUpperCase()}
+                </div>
+                <div className="truncate">
+                  <div className="font-medium text-sm truncate">
                     {player.username}
-                    <span className="text-sm">{getFlagEmoji(player.country)}</span>
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    {player.address.slice(0, 4)}...{player.address.slice(-4)}
                   </div>
                 </div>
               </div>
-              
-              <div className="col-span-2 text-center font-mono font-bold">
+
+              <div className="col-span-2 text-center font-mono font-bold text-sm">
                 {player.winRate}%
               </div>
-              
-              <div className="col-span-2 hidden md:block text-center text-gray-300">
-                {player.matches}
-              </div>
-              
-              <div className="col-span-2 md:col-span-3 text-right">
+
+              <div className="col-span-2 text-right">
                 <div className="flex items-center justify-end gap-1">
-                  <ChevronUp size={16} className="text-green-400" />
-                  <span className="font-mono font-bold text-neon-blue">{player.xp.toLocaleString()}</span>
+                  <span className="font-mono font-bold text-neon-blue text-sm">{player.xp.toLocaleString()}</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </motion.div>
       </div>
-      
+
       <div className="flex justify-center mt-8">
         <Button variant="outline" className="text-gray-400 border-gray-700">
           View All Rankings

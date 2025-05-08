@@ -1,13 +1,12 @@
 
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Trophy, Users, Shield, User, Wallet } from 'lucide-react';
+import { Trophy, Users, Shield, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 
 const MobileNav: React.FC = () => {
   const location = useLocation();
-  
+
   const handleConnectWallet = () => {
     toast({
       title: "Connect Wallet",
@@ -28,12 +27,6 @@ const MobileNav: React.FC = () => {
       path: '/battle'
     },
     {
-      icon: <Wallet size={20} />,
-      label: 'Wallet',
-      path: '#',
-      onClick: handleConnectWallet
-    },
-    {
       icon: <Users size={20} />,
       label: 'Leaderboard',
       path: '/leaderboard'
@@ -44,12 +37,12 @@ const MobileNav: React.FC = () => {
       path: '/profile'
     }
   ];
-  
+
   // Don't show mobile navigation on landing page
   if (location.pathname === '/') {
     return null;
   }
-  
+
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50">
       <div className="glass-panel rounded-t-2xl border-t border-white/10 py-2">

@@ -103,11 +103,11 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              {/* <Link to="/arena">
+              <Link to="/arena">
                 <Button className="text-lg py-6 px-8 bg-neon-blue hover:bg-neon-blue/80 shadow-lg shadow-neon-blue/20 transition-all duration-300 hover:scale-105 rounded-full">
                   Enter Arena <ArrowRight className="ml-2" />
                 </Button>
-              </Link> */}
+              </Link>
 
               {/* Waitlist Form - Connected to Supabase */}
               <form onSubmit={handleSubmitEmail} className="flex flex-col sm:flex-row gap-2">
